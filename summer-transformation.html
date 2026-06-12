@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Transformation — Sean</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=Inter:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --paper: #f5f2eb;
+    --accent: #c84b2f;
+    --accent-soft: #f0d5ce;
+    --green: #2d6a4f;
+    --green-soft: #d4edda;
+    --muted: #7a7a72;
+    --rule: #d8d4c8;
+    --card: #ffffff;
+    --shadow: 0 1px 3px rgba(26,26,24,0.08);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 6vw, 52px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .header-title span { color: var(--accent); }
+  .header-sub {
+    font-size: 13px;
+    color: #9a9a92;
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 680px; margin: 0 auto; padding: 0 16px; }
+
+  /* PROGRESS BAR SECTION */
+  .progress-section {
+    background: var(--card);
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 24px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .progress-label-left {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .progress-label-right {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .progress-track {
+    height: 8px;
+    background: var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, #e8734a 100%);
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* STAT CARDS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px 0 4px;
+  }
+  .stat-card {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--rule);
+  }
+  .stat-card.full { grid-column: 1 / -1; }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-value.good { color: var(--green); }
+  .stat-value.accent { color: var(--accent); }
+  .stat-delta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+  .stat-delta.positive { color: var(--green); }
+  .stat-delta.negative { color: var(--accent); }
+
+  /* WEEKLY LOG */
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .week-entry {
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    padding: 16px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .week-entry:hover { border-color: var(--accent); }
+  .week-entry.active { border-color: var(--accent); border-width: 2px; }
+  .week-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .week-weight {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .week-change {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .week-change.down { color: var(--green); }
+  .week-change.up { color: var(--accent); }
+  .week-change.same { color: var(--muted); }
+
+  .week-detail {
+    display: none;
+    grid-column: 1 / -1;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    margin-top: 4px;
+  }
+  .week-detail.open { display: block; }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .detail-item { }
+  .detail-item-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .detail-item-val {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .note-input {
+    width: 100%;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--paper);
+    resize: none;
+    min-height: 56px;
+    outline: none;
+  }
+  .note-input:focus { border-color: var(--accent); }
+
+  /* LOG FORM */
+  .log-form {
+    background: var(--card);
+    border-radius: 8px;
+    border: 2px dashed var(--rule);
+    padding: 20px;
+    margin-bottom: 10px;
+  }
+  .log-form-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  @media (min-width: 480px) {
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .form-field { display: flex; flex-direction: column; gap: 4px; }
+  .form-field label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .form-field input, .form-field select, .form-field textarea {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    width: 100%;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--accent); }
+  .form-field.full { grid-column: 1 / -1; }
+
+  /* WORKOUT CHECKLIST */
+  .workout-check {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .check-item.checked {
+    background: var(--green-soft);
+    border-color: var(--green);
+  }
+  .check-item input { display: none; }
+  .check-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--rule);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .check-item.checked .check-dot {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check-dot::after {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .check-item.checked .check-dot::after { opacity: 1; }
+  .check-label { font-size: 13px; font-weight: 500; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #b03d22; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--rule);
+  }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  /* WAKE TIME SECTION */
+  .wake-timeline {
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+  }
+  .timeline-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 12px;
+  }
+  .timeline-step {
+    display: grid;
+    grid-template-columns: 80px 16px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .timeline-step:last-child { border-bottom: none; }
+  .timeline-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .timeline-time.target { color: var(--accent); }
+  .timeline-time.achieved { color: var(--green); }
+  .timeline-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--rule);
+    margin: 0 auto;
+  }
+  .timeline-dot.filled { background: var(--green); border-color: var(--green); }
+  .timeline-dot.current { background: var(--accent); border-color: var(--accent); }
+  .timeline-dot.future { background: var(--paper); border-color: var(--rule); }
+  .timeline-label { font-size: 13px; color: var(--ink); }
+  .timeline-sublabel { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  /* WEEKLY TARGETS */
+  .targets-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .target-pill {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .target-pill.met {
+    background: var(--green-soft);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* WEIGHT GRAPH */
+  .graph-card {
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+  }
+  .graph-wrap { width: 100%; overflow-x: auto; }
+  .graph-wrap svg { display: block; overflow: visible; }
+  .graph-empty {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* DAILY HABIT CHECKLIST */
+  .habit-card {
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+  }
+  .habit-date-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .habit-date-label { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; }
+  .habit-nav-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    width: 32px; height: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .habit-nav-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .habit-list { display: flex; flex-direction: column; gap: 6px; }
+  .habit-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .habit-row.done { background: var(--green-soft); border-color: var(--green); }
+  .habit-checkbox {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--rule);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .habit-row.done .habit-checkbox { background: var(--green); border-color: var(--green); color: white; }
+  .habit-row-text { flex: 1; }
+  .habit-row-name { font-size: 14px; font-weight: 500; }
+  .habit-row-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .habit-streak-bar { display: flex; gap: 3px; margin-top: 14px; flex-wrap: wrap; }
+  .habit-streak-dot { width: 8px; height: 8px; border-radius: 2px; background: var(--rule); flex-shrink: 0; }
+  .habit-streak-dot.done { background: var(--green); }
+  .habit-streak-dot.today { background: var(--accent); }
+  .habit-summary { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 40px;
+    letter-spacing: 0.06em;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    z-index: 100;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div class="header-eyebrow">Jul 1 – Aug 30, 2025 · 61 days</div>
+    <div class="header-title">Summer<br><span>Transformation.</span></div>
+    <div class="header-sub">225 → 207 · 1,720 cal · 150g protein · 6 days/week</div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-section">
+  <div class="container">
+    <div class="progress-label">
+      <span class="progress-label-left">Fat loss progress</span>
+      <span class="progress-label-right" id="lostDisplay">0 lbs lost</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-meta">
+      <span>Start: 225</span>
+      <span id="currentDisplay">Current: 225</span>
+      <span>Goal: 207</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- DAILY HABITS -->
+  <div class="section-title">Today's Habits</div>
+  <div class="habit-card">
+    <div class="habit-date-nav">
+      <button class="habit-nav-btn" onclick="shiftHabitDay(-1)">&#8249;</button>
+      <div class="habit-date-label" id="habitDateLabel"></div>
+      <button class="habit-nav-btn" onclick="shiftHabitDay(1)">&#8250;</button>
+    </div>
+    <div class="habit-list" id="habitList"></div>
+    <div class="habit-streak-bar" id="habitStreakBar"></div>
+    <div class="habit-summary" id="habitSummary"></div>
+  </div>
+
+  <!-- LOG NEW WEEK -->
+  <div class="section-title">Log a Week</div>
+  <div class="log-form">
+    <div class="log-form-title">Weekly check-in</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Week ending</label>
+        <input type="date" id="logDate">
+      </div>
+      <div class="form-field">
+        <label>Avg weight (lbs)</label>
+        <input type="number" id="logWeight" placeholder="e.g. 223.5" step="0.1" min="150" max="350">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Avg calories/day</label>
+        <input type="number" id="logCal" placeholder="1720" min="1000" max="4000">
+      </div>
+      <div class="form-field">
+        <label>Avg protein/day (g)</label>
+        <input type="number" id="logProtein" placeholder="150" min="50" max="300">
+      </div>
+    </div>
+    <div style="margin-bottom: 8px;">
+      <div class="log-form-title" style="margin-bottom: 8px;">Workouts completed</div>
+      <div class="workout-check" id="workoutCheck">
+        <div class="check-item" data-key="lift1" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🏋️ Lift A</span>
+        </div>
+        <div class="check-item" data-key="lift2" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🏋️ Lift B</span>
+        </div>
+        <div class="check-item" data-key="lift3" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🏋️ Lift C</span>
+        </div>
+        <div class="check-item" data-key="ruck1" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🎒 Ruck 1</span>
+        </div>
+        <div class="check-item" data-key="ruck2" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🎒 Ruck 2</span>
+        </div>
+        <div class="check-item" data-key="cycle" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🚴 Cycle</span>
+        </div>
+        <div class="check-item" data-key="walk" onclick="toggleCheck(this)">
+          <div class="check-dot"></div>
+          <span class="check-label">🚶 Long Walk</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field full">
+        <label>Note (optional)</label>
+        <textarea id="logNote" placeholder="How did the week feel? Any disruptions?" style="resize:none; min-height:56px; border:1px solid var(--rule); border-radius:4px; padding:8px 10px; font-family:'Inter',sans-serif; font-size:13px; background:var(--paper); outline:none;"></textarea>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveWeek()">Save week</button>
+      <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+
+  <!-- WEEKLY LOG -->
+  <div class="section-title">Weekly Log</div>
+  <div id="weeklyLog">
+    <div style="text-align:center; padding: 32px 0; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 12px;">
+      No weeks logged yet. Check in after your first week.
+    </div>
+  </div>
+
+  <!-- WEIGHT GRAPH -->
+  <div class="section-title">Weight Trend</div>
+  <div class="graph-card">
+    <div id="weightGraph"><div class="graph-empty">Log your first week to see the trend.</div></div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Current Weight</div>
+      <div class="stat-value accent" id="statWeight">225</div>
+      <div class="stat-delta" id="statWeightDelta">Starting weight</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Lbs to Goal</div>
+      <div class="stat-value" id="statToGo">18</div>
+      <div class="stat-delta" id="statPace">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Days Remaining</div>
+      <div class="stat-value" id="statDays">61</div>
+      <div class="stat-delta" id="statDaysPct">0% complete</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Streak</div>
+      <div class="stat-value good" id="statStreak">0</div>
+      <div class="stat-delta">weeks logged</div>
+    </div>
+  </div>
+
+  <!-- WAKE TIME TRANSITION -->
+  <div class="section-title">Wake Time Plan</div>
+  <div class="wake-timeline">
+    <div style="font-size:13px; color: var(--muted); line-height:1.5;">
+      Shift your alarm back gradually — don't wait until September 1st.
+    </div>
+    <div class="timeline-steps" id="wakeTimeline"></div>
+  </div>
+
+  <div class="footer-note">Built for the summer that carries into September.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── STATE ──────────────────────────────────────────────────────────────────
+  const START_WEIGHT = 225;
+  const GOAL_WEIGHT  = 207;
+  const START_DATE   = new Date('2025-07-01');
+  const END_DATE     = new Date('2025-08-30');
+
+  let weeks = JSON.parse(localStorage.getItem('summerBuild_weeks') || '[]');
+
+  // ── WAKE TIME TIMELINE ────────────────────────────────────────────────────
+  const wakeSteps = [
+    { date: 'Jul 1',  time: '6:00 AM',  label: 'Summer rhythm', sub: 'Enjoy the space', status: 'current' },
+    { date: 'Jul 28', time: '5:45 AM',  label: 'First shift',   sub: 'Move back 15 min', status: 'future' },
+    { date: 'Aug 11', time: '5:30 AM',  label: 'Getting close', sub: 'Move back another 15', status: 'future' },
+    { date: 'Aug 25', time: '5:15 AM',  label: 'September-ready', sub: 'Adapted before school starts', status: 'future' },
+    { date: 'Sep 1',  time: '5:15 AM',  label: 'School starts', sub: 'Already there. No shock.', status: 'target' },
+  ];
+
+  function renderWakeTimeline() {
+    const el = document.getElementById('wakeTimeline');
+    el.innerHTML = wakeSteps.map(s => `
+      <div class="timeline-step">
+        <div class="timeline-time ${s.status === 'target' ? 'target' : s.status === 'achieved' ? 'achieved' : ''}">${s.time}</div>
+        <div class="timeline-dot ${s.status === 'current' ? 'filled' : s.status === 'target' ? 'current' : 'future'}"></div>
+        <div>
+          <div class="timeline-label">${s.label} <span style="color:var(--muted);font-size:11px;">· ${s.date}</span></div>
+          <div class="timeline-sublabel">${s.sub}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── STATS ─────────────────────────────────────────────────────────────────
+  function updateStats() {
+    const today = new Date();
+    const totalDays = Math.round((END_DATE - START_DATE) / 86400000);
+    const elapsed   = Math.max(0, Math.min(totalDays, Math.round((today - START_DATE) / 86400000)));
+    const remaining = Math.max(0, totalDays - elapsed);
+    const pctDone   = Math.round((elapsed / totalDays) * 100);
+
+    const currentWeight = weeks.length > 0 ? weeks[weeks.length - 1].weight : START_WEIGHT;
+    const lost = Math.max(0, START_WEIGHT - currentWeight);
+    const toGo = Math.max(0, currentWeight - GOAL_WEIGHT);
+    const pctLost = Math.min(100, (lost / (START_WEIGHT - GOAL_WEIGHT)) * 100);
+
+    document.getElementById('progressFill').style.width = pctLost + '%';
+    document.getElementById('lostDisplay').textContent = lost.toFixed(1) + ' lbs lost';
+    document.getElementById('currentDisplay').textContent = 'Current: ' + currentWeight;
+
+    document.getElementById('statWeight').textContent = currentWeight;
+    document.getElementById('statWeightDelta').textContent = lost > 0
+      ? `↓ ${lost.toFixed(1)} lbs from start`
+      : 'Starting weight';
+    document.getElementById('statWeightDelta').className = 'stat-delta ' + (lost > 0 ? 'positive' : '');
+
+    document.getElementById('statToGo').textContent = toGo.toFixed(1);
+    const rateNeeded = remaining > 0 ? (toGo / (remaining / 7)).toFixed(1) : '—';
+    document.getElementById('statPace').textContent = remaining > 0
+      ? `${rateNeeded} lbs/week needed`
+      : 'Program complete';
+
+    document.getElementById('statDays').textContent = remaining;
+    document.getElementById('statDaysPct').textContent = pctDone + '% complete';
+
+    document.getElementById('statStreak').textContent = weeks.length;
+
+    // Set default date to today
+    if (!document.getElementById('logDate').value) {
+      document.getElementById('logDate').value = today.toISOString().split('T')[0];
+    }
+  }
+
+  // ── WORKOUT CHECK ─────────────────────────────────────────────────────────
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+  }
+
+  function getCheckedWorkouts() {
+    const items = document.querySelectorAll('.check-item.checked');
+    return Array.from(items).map(i => i.dataset.key);
+  }
+
+  function resetChecks() {
+    document.querySelectorAll('.check-item').forEach(i => i.classList.remove('checked'));
+  }
+
+  // ── SAVE WEEK ─────────────────────────────────────────────────────────────
+  function saveWeek() {
+    const date    = document.getElementById('logDate').value;
+    const weight  = parseFloat(document.getElementById('logWeight').value);
+    const cal     = parseInt(document.getElementById('logCal').value) || 1720;
+    const protein = parseInt(document.getElementById('logProtein').value) || 150;
+    const note    = document.getElementById('logNote').value.trim();
+    const workouts = getCheckedWorkouts();
+
+    if (!date || isNaN(weight)) {
+      showToast('Add a date and weight to save.');
+      return;
+    }
+    if (weight < 150 || weight > 350) {
+      showToast('Weight looks off — check the number.');
+      return;
+    }
+
+    const entry = { date, weight, cal, protein, note, workouts };
+    weeks.push(entry);
+    weeks.sort((a, b) => new Date(a.date) - new Date(b.date));
+    localStorage.setItem('summerBuild_weeks', JSON.stringify(weeks));
+
+    clearForm();
+    renderWeeklyLog();
+    updateStats();
+    renderWeightGraph();
+    showToast('Week saved. Keep going.');
+  }
+
+  function clearForm() {
+    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('logWeight').value = '';
+    document.getElementById('logCal').value = '';
+    document.getElementById('logProtein').value = '';
+    document.getElementById('logNote').value = '';
+    resetChecks();
+  }
+
+  // ── RENDER LOG ────────────────────────────────────────────────────────────
+  function workoutLabel(key) {
+    const map = { lift1:'Lift A', lift2:'Lift B', lift3:'Lift C', ruck1:'Ruck 1', ruck2:'Ruck 2', cycle:'Cycle', walk:'Walk' };
+    return map[key] || key;
+  }
+
+  function renderWeeklyLog() {
+    const el = document.getElementById('weeklyLog');
+    if (weeks.length === 0) {
+      el.innerHTML = `<div style="text-align:center;padding:32px 0;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;">No weeks logged yet. Check in after your first week.</div>`;
+      return;
+    }
+
+    el.innerHTML = weeks.slice().reverse().map((w, ri) => {
+      const i = weeks.length - 1 - ri;
+      const prev = i > 0 ? weeks[i-1].weight : START_WEIGHT;
+      const delta = w.weight - prev;
+      const deltaStr = delta === 0 ? '—' : (delta > 0 ? '+' : '') + delta.toFixed(1) + ' lbs';
+      const deltaClass = delta < 0 ? 'down' : delta > 0 ? 'up' : 'same';
+      const dateStr = new Date(w.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const workoutCount = (w.workouts || []).length;
+      const calOk = w.cal <= 1800;
+      const proteinOk = w.protein >= 140;
+
+      return `
+        <div class="week-entry" onclick="toggleDetail(${i})">
+          <div class="week-num">WK ${i+1}<br>${dateStr}</div>
+          <div>
+            <div class="week-weight">${w.weight} <span style="font-size:14px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;">lbs</span></div>
+            <div class="targets-row">
+              <span class="target-pill ${calOk ? 'met' : ''}">${w.cal} cal</span>
+              <span class="target-pill ${proteinOk ? 'met' : ''}">${w.protein}g protein</span>
+              <span class="target-pill ${workoutCount >= 6 ? 'met' : ''}">${workoutCount}/7 workouts</span>
+            </div>
+          </div>
+          <div class="week-change ${deltaClass}">${deltaStr}</div>
+          <div class="week-detail" id="detail-${i}">
+            ${w.workouts && w.workouts.length > 0 ? `
+              <div style="margin-bottom:8px;">
+                <div class="detail-item-label" style="margin-bottom:4px;">Workouts</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                  ${w.workouts.map(k => `<span class="target-pill met" style="font-size:11px;">${workoutLabel(k)}</span>`).join('')}
+                </div>
+              </div>` : ''}
+            ${w.note ? `
+              <div style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.5;padding:8px;background:var(--paper);border-radius:4px;">"${w.note}"</div>` : ''}
+            <div style="margin-top:8px;">
+              <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px;" onclick="deleteWeek(event,${i})">Delete entry</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function toggleDetail(i) {
+    const el = document.getElementById('detail-' + i);
+    if (el) el.classList.toggle('open');
+  }
+
+  function deleteWeek(e, i) {
+    e.stopPropagation();
+    if (!confirm('Delete this entry?')) return;
+    weeks.splice(i, 1);
+    localStorage.setItem('summerBuild_weeks', JSON.stringify(weeks));
+    renderWeeklyLog();
+    updateStats();
+    renderWeightGraph();
+    showToast('Entry deleted.');
+  }
+
+  // ── TOAST ─────────────────────────────────────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+
+  // ── WEIGHT GRAPH ──────────────────────────────────────────────────────────
+  function renderWeightGraph() {
+    const el = document.getElementById('weightGraph');
+    const points = [{ date: 'Start', weight: START_WEIGHT }, ...weeks.map(w => ({ date: w.date, weight: w.weight }))];
+
+    if (points.length < 2) {
+      el.innerHTML = '<div class="graph-empty">Log your first week to see the trend.</div>';
+      return;
+    }
+
+    const W = 600, H = 180, PAD = { top: 16, right: 20, bottom: 32, left: 40 };
+    const weights = points.map(p => p.weight);
+    const minW = Math.min(...weights, GOAL_WEIGHT) - 2;
+    const maxW = Math.max(...weights) + 2;
+    const chartW = W - PAD.left - PAD.right;
+    const chartH = H - PAD.top - PAD.bottom;
+
+    const xScale = i => PAD.left + (i / (points.length - 1)) * chartW;
+    const yScale = w => PAD.top + chartH - ((w - minW) / (maxW - minW)) * chartH;
+
+    // Goal line y
+    const goalY = yScale(GOAL_WEIGHT);
+
+    // Build path
+    const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + xScale(i).toFixed(1) + ',' + yScale(p.weight).toFixed(1)).join(' ');
+
+    // Area path
+    const areaD = pathD + ' L' + xScale(points.length-1).toFixed(1) + ',' + (PAD.top + chartH) + ' L' + PAD.left + ',' + (PAD.top + chartH) + ' Z';
+
+    // Labels
+    const labels = points.map((p, i) => {
+      const x = xScale(i);
+      const y = yScale(p.weight);
+      const labelStr = i === 0 ? 'Start' : new Date(p.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return `
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#c84b2f" stroke="white" stroke-width="1.5"/>
+        <text x="${x.toFixed(1)}" y="${(y - 10).toFixed(1)}" text-anchor="middle" font-size="10" fill="#1a1a18" font-family="DM Mono, monospace">${p.weight}</text>
+        <text x="${x.toFixed(1)}" y="${(PAD.top + chartH + 18).toFixed(1)}" text-anchor="middle" font-size="9" fill="#7a7a72" font-family="DM Mono, monospace">${labelStr}</text>
+      `;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="graph-wrap">
+        <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c84b2f" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#c84b2f" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Goal line -->
+          <line x1="${PAD.left}" y1="${goalY.toFixed(1)}" x2="${PAD.left + chartW}" y2="${goalY.toFixed(1)}" stroke="#2d6a4f" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="${(PAD.left + chartW + 4).toFixed(1)}" y="${(goalY + 4).toFixed(1)}" font-size="9" fill="#2d6a4f" font-family="DM Mono, monospace">207</text>
+          <!-- Area fill -->
+          <path d="${areaD}" fill="url(#areaGrad)"/>
+          <!-- Line -->
+          <path d="${pathD}" fill="none" stroke="#c84b2f" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Points + labels -->
+          ${labels}
+          <!-- Y axis -->
+          <line x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${PAD.top + chartH}" stroke="#d8d4c8" stroke-width="1"/>
+          <line x1="${PAD.left}" y1="${PAD.top + chartH}" x2="${PAD.left + chartW}" y2="${PAD.top + chartH}" stroke="#d8d4c8" stroke-width="1"/>
+        </svg>
+      </div>`;
+  }
+
+  // ── DAILY HABITS ──────────────────────────────────────────────────────────
+  const HABITS = [
+    { id: 'log',     name: 'Log food in Carbon',    sub: 'Even on rough days' },
+    { id: 'protein', name: 'Hit protein target',    sub: '150g minimum' },
+    { id: 'cal',     name: 'Stay within calories',  sub: '1,720 cal target' },
+    { id: 'workout', name: 'Complete workout',       sub: 'Lift / ruck / cycle / walk' },
+    { id: 'sleep',   name: 'In bed by 10pm',         sub: 'Protect your recovery' },
+    { id: 'water',   name: 'Drink enough water',     sub: 'At least 8 glasses' },
+  ];
+
+  let habitDayOffset = 0; // 0 = today, -1 = yesterday, etc.
+
+  function habitDateKey(offset) {
+    const d = new Date();
+    d.setDate(d.getDate() + offset);
+    return d.toISOString().split('T')[0];
+  }
+
+  function habitDateDisplay(offset) {
+    if (offset === 0) return 'Today';
+    if (offset === -1) return 'Yesterday';
+    const d = new Date();
+    d.setDate(d.getDate() + offset);
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function getHabitData(dateKey) {
+    return JSON.parse(localStorage.getItem('habits_' + dateKey) || '{}');
+  }
+
+  function saveHabitData(dateKey, data) {
+    localStorage.setItem('habits_' + dateKey, JSON.stringify(data));
+  }
+
+  function toggleHabit(habitId) {
+    const dateKey = habitDateKey(habitDayOffset);
+    const data = getHabitData(dateKey);
+    data[habitId] = !data[habitId];
+    saveHabitData(dateKey, data);
+    renderHabits();
+  }
+
+  function shiftHabitDay(dir) {
+    const newOffset = habitDayOffset + dir;
+    if (newOffset > 0) return; // can't go to future
+    habitDayOffset = newOffset;
+    renderHabits();
+  }
+
+  function renderHabits() {
+    const dateKey = habitDateKey(habitDayOffset);
+    const data = getHabitData(dateKey);
+    const doneCount = HABITS.filter(h => data[h.id]).length;
+
+    document.getElementById('habitDateLabel').textContent = habitDateDisplay(habitDayOffset);
+
+    document.getElementById('habitList').innerHTML = HABITS.map(h => `
+      <div class="habit-row ${data[h.id] ? 'done' : ''}" onclick="toggleHabit('${h.id}')">
+        <div class="habit-checkbox">${data[h.id] ? '✓' : ''}</div>
+        <div class="habit-row-text">
+          <div class="habit-row-name">${h.name}</div>
+          <div class="habit-row-sub">${h.sub}</div>
+        </div>
+      </div>`).join('');
+
+    // Streak bar — last 30 days
+    const dots = [];
+    for (let i = -29; i <= 0; i++) {
+      const dk = habitDateKey(i);
+      const d = getHabitData(dk);
+      const count = HABITS.filter(h => d[h.id]).length;
+      const cls = i === habitDayOffset ? 'today' : count >= 4 ? 'done' : '';
+      dots.push(`<div class="habit-streak-dot ${cls}" title="${dk}: ${count}/${HABITS.length}"></div>`);
+    }
+    document.getElementById('habitStreakBar').innerHTML = dots.join('');
+    document.getElementById('habitSummary').textContent = doneCount + '/' + HABITS.length + ' habits done · last 30 days above';
+  }
+
+  // ── INIT ──────────────────────────────────────────────────────────────────
+  renderWakeTimeline();
+  renderWeeklyLog();
+  updateStats();
+  renderWeightGraph();
+  renderHabits();
+</script>
+</body>
+</html>
